@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc mừng 20/10</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lora:ital@1&display=swap');
+        /* Import font thư pháp tiếng Trung nghệ thuật đỉnh cao từ Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+        
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #e2eff7, #f7f0df);
+            font-family: 'Dancing Script', cursive;
+            transition: background 2s ease;
+        }
+
+        body.blooming {
+            background: linear-gradient(to bottom, #89cff0, #fdf8e6);
+        }
+
+        /* Hiệu ứng mây trôi - Xuất hiện sẵn từ đầu */
+        #clouds {
+            position: absolute; top: 0; left: 0; width: 100%; height: 60%;
+            pointer-events: none; z-index: 10; overflow: hidden;
+            opacity: 0.65;
+            transition: opacity 2s ease;
+        }
+        body.blooming #clouds { opacity: 0.9; }
+        
+        .cloud {
+            width: 140px; height: 45px; background: #fff; border-radius: 50px;
+            position: absolute; filter: blur(3px); opacity: 0.7;
+        }
+        .cloud::before {
+            content: ''; width: 60px; height: 60px; background: #fff; border-radius: 50%;
+            position: absolute; top: -25px; left: 25px;
+        }
+        .cloud::after {
+            content: ''; width: 80px; height: 80px; background: #fff; border-radius: 50%;
+            position: absolute; top: -40px; left: 55px;
+        }
+        @keyframes drift {
+            from { transform: translateX(-200px); }
+            to { transform: translateX(110vw); }
+        }
+
+        /* Hiệu ứng hoa đung đưa trước gió */
+        @keyframes sway {
+            0% { transform: rotate(-2.5deg); }
+            100% { transform: rotate(2.5deg); }
+        }
+
+        /* Intro Text */
+        .intro-text {
+            position: absolute;
+            top: 20%; left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #9d6b7c;
+            z-index: 100;
+            transition: opacity 1s, transform 1s;
+            pointer-events: none;
+            width: 100%;
+        }
+        .intro-text h1 { font-size: 38px; margin-bottom: 5px; font-weight: normal; letter-spacing: 1px; }
+        .intro-text p { font-size: 18px; margin-top: 0; font-family: 'Lora', serif; font-style: italic; color: #8e6875; }
+        body.blooming .intro-text { opacity: 0; transform: translate(-50%, -20px); }
+
+        /* Main Flower Container */
+        .main-flower-wrap {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 150;
+            cursor: pointer;
+            transition: top 2s ease-in-out, transform 2s ease;
+        }
+        body.blooming .main-flower-wrap {
+            top: 65%;
+            transform: translate(-50%, -50%) scale(1.15);
+            pointer-events: none;
+        }
+
+        .main-flower {
+            position: relative;
+            width: 160px; height: 160px;
+            animation: breathe 3s infinite alternate ease-in-out;
+        }
+        body.blooming .main-flower {
+            animation: sway 4s infinite alternate ease-in-out;
+            transform-origin: 80px calc(110px + 35vh); 
+        }
+        @keyframes breathe {
+            0% { transform: scale(0.96); }
+            100% { transform: scale(1.04); }
+        }
+
+        /* Thêm phong cách font thư pháp cho chữ Trung Quốc */
+        .cn-text {
+            font-family: 'Ma Shan Zheng', cursive !important;
+            font-size: 55px; /* Kích thước lớn, nổi bật */
+            color: #d81b60; /* Màu hồng đỏ đồng điệu với chủ đề thiệp */
+            line-height: 1.3;
+            margin: 15px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Image Rose Styling */
+        .rose-img {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px; height: auto;
+            z-index: 5;
+            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.15));
+            pointer-events: none;
+        }
+
+        /* Base Leaf Style */
+        .leaf {
+            position: absolute;
+            background: #388e3c;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Garden */
+        #garden {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 90vh;
+            pointer-events: none; z-index: 50;
+        }
+        
+        .bg-flower-wrap {
+            position: absolute; bottom: 0;
+            transform: scale(0) translateY(100px);
+            opacity: 0;
+            transition: transform 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1.5s;
+        }
+        
+        body.blooming .bg-flower-wrap {
+            transform: scale(var(--target-scale)) translateY(0);
+            opacity: 1;
+        }
+        
+        /* Rose bud (Nụ hoa) */
+        .bud {
+            position: absolute;
+            top: -15px; left: 50%;
+            transform: translateX(-50%);
+            width: 28px; height: 42px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            z-index: 6;
+        }
+        .bud-sepals {
+            position: absolute;
+            top: 16px; left: -4px;
+            width: 36px; height: 30px;
+            background: #2e7d32;
+            clip-path: polygon(0 40%, 20% 0, 50% 100%, 80% 0, 100% 40%, 50% 100%);
+            z-index: 7;
+        }
+
+        /* Buttons */
+        .action-buttons {
+            position: absolute;
+            bottom: 40px; left: 50%;
+            transform: translateX(-50%);
+            display: flex; gap: 20px;
+            z-index: 200;
+            opacity: 0; visibility: hidden;
+            transition: opacity 1s ease 4.5s;
+        }
+        body.blooming .action-buttons {
+            opacity: 1; visibility: visible;
+        }
+        .btn {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 25px;
+            font-family: 'Lora', serif;
+            font-size: 15px;
+            font-weight: bold;
+            color: #d81b60;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+        }
+        .btn:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
+
+        /* Card Overlay */
+        .card-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 400;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.5s;
+            backdrop-filter: blur(5px);
+        }
+        .card-overlay.active { opacity: 1; visibility: visible; }
+        
+        .card {
+            background: #fffdfc;
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 580px; max-width: 95%;
+            max-height: 85vh; 
+            overflow-y: auto; 
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            border: 3px solid #ffb6c9;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.5s;
+        }
+        .card::-webkit-scrollbar { width: 8px; }
+        .card::-webkit-scrollbar-thumb { background: #ffb6c9; border-radius: 10px; }
+        
+        .card-overlay.active .card { transform: translateY(0) scale(1); }
+        
+        .card h2 { color: #d81b60; font-size: 38px; margin: 0 0 15px 0; }
+        .card p { font-family: 'Lora', serif; font-size: 17px; color: #555; line-height: 1.6; margin-bottom: 10px; }
+        
+        /* 5 Photos Gallery Styling */
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .photo {
+            width: 140px; height: 140px; 
+            background: #ffe4e1;
+            border: 4px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            border-radius: 10px;
+            overflow: hidden;
+            transform: rotate(-2deg);
+            transition: transform 0.3s;
+        }
+        .photo:nth-child(even) { transform: rotate(3deg); }
+        .photo:nth-child(3) { transform: rotate(-4deg); }
+        .photo:hover { transform: scale(1.05) rotate(0deg); z-index: 10; }
+        .photo img {
+            width: 100%; height: 100%;
+            object-fit: cover; 
+        }
+
+        .close-card {
+            margin-top: 20px; padding: 10px 35px;
+            background: #fca5a5; color: #fff;
+            border: none; border-radius: 20px;
+            cursor: pointer; font-family: 'Lora', serif; font-size: 16px; font-weight: bold;
+        }
+        .close-card:hover { background: #f87171; }
+
+        /* Corner Text */
+        .corner-text {
+            position: absolute; top: 25px; left: 35px;
+            font-size: 26px; color: #8e6875;
+            opacity: 0; transition: opacity 2s ease 2.5s; z-index: 100;
+        }
+        body.blooming .corner-text { opacity: 1; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Mây trôi hiện sẵn -->
+    <div id="clouds">
+        <div class="cloud" style="top: 8%; left: -200px; animation: drift 45s linear infinite;"></div>
+        <div class="cloud" style="top: 20%; left: -200px; animation: drift 60s linear infinite 15s; transform: scale(0.8);"></div>
+        <div class="cloud" style="top: 12%; left: -200px; animation: drift 50s linear infinite 35s; transform: scale(1.2);"></div>
+        <div class="cloud" style="top: 30%; left: -200px; animation: drift 70s linear infinite 5s; transform: scale(0.6);"></div>
+    </div>
+
+    <div class="corner-text">Dành tặng em, cả một vườn thương.</div>
+
+    <div class="intro-text">
+        <h1>Từ một bông hoa nhỏ...</h1>
+        <p>Chạm vào hoa... em tự nghĩ nhé</p>
+    </div>
+
+    <div class="main-flower-wrap" id="flowerWrap">
+        <div class="main-flower">
+            <img src="hoahong1.png" alt="Rose" class="rose-img">
+            <svg viewBox="0 0 100 800" preserveAspectRatio="none" style="position: absolute; top: 110px; left: 30px; width: 100px; height: 800px; z-index: 1;">
+                <path d="M 50 0 Q 75 400 60 800" fill="none" stroke="#2e7d32" stroke-width="3.5" stroke-linecap="round" />
+            </svg>
+            <div class="leaf" style="width: 38px; height: 38px; top: 145px; left: 47px; border-radius: 0 50% 0 50%; transform-origin: bottom right; transform: rotate(-25deg); z-index: 2;"></div>
+            <div class="leaf" style="width: 32px; height: 32px; top: 220px; left: 93px; border-radius: 50% 0 50% 0; transform-origin: bottom left; transform: rotate(30deg); z-index: 2;"></div>
+        </div>
+    </div>
+
+    <div id="garden"></div>
+
+    <div class="action-buttons">
+        <button class="btn" id="btnReadCard">Đọc lại thiệp</button>
+        <button class="btn" id="btnReset">Cho hoa nở lại</button>
+    </div>
+
+    <div class="card-overlay" id="cardOverlay">
+        <div class="card">
+            <h2>Chúc mừng 20/10!</h2>
+            <p>Nhân ngày Phụ nữ Việt Nam, chúc em luôn xinh đẹp, rạng rỡ và mong những điều tốt đẹp luôn đến với emm.</p>
+            
+            <div class="photo-gallery">
+                <div class="photo"><img src="anh1.jpg" alt="Ảnh 1"></div>
+                <div class="photo"><img src="anh2.jpg" alt="Ảnh 2"></div>
+                <div class="photo"><img src="anh3.jpg" alt="Ảnh 3"></div>
+                <div class="photo"><img src="anh4.jpg" alt="Ảnh 4"></div>
+                <div class="photo"><img src="anh5.jpg" alt="Ảnh 5"></div>
+            </div>
+
+            <!-- Chữ tiếng Trung với font thư pháp Ma Shan Zheng mới -->
+            <p class="cn-text">我爱你</p>
+            <p style="color: #d81b60; font-size: 24px; font-family: 'Dancing Script', cursive; margin-top: 15px;">Thương gửi em ❤️</p>
+            
+            <button class="close-card" id="btnCloseCard">Gấp thiệp lại</button>
+        </div>
+    </div>
+
+    <script>
+        const garden = document.getElementById('garden');
+        const roseImages = ["hoahong1.png", "hoahong2.png"];
+        
+        function getStemX(y, stemHeight, bow) {
+            let t = y / stemHeight;
+            let P0 = 50; 
+            let P1 = 50 + bow;
+            let P2 = 50 + bow / 2;
+            return (1 - t) * (1 - t) * P0 + 2 * (1 - t) * t * P1 + t * t * P2;
+        }
+
+        function initGarden() {
+            garden.innerHTML = ''; 
+            
+            const numFlowers = 200; 
+
+            for(let i=0; i<numFlowers; i++) {
+                let fl = document.createElement('div');
+                fl.className = 'bg-flower-wrap';
+                
+                let isBud = Math.random() < 0.15; 
+                let left = Math.random() * 120 - 2.5; 
+                
+                let rand = Math.random();
+                let bottom = Math.pow(rand, 1.4) * 60 - 15; 
+                
+                let depth = (bottom + 15) / 80; 
+                let baseScale = 1.0 - depth * 0.5; 
+                let scale = baseScale + (Math.random() * 0.2 - 0.1); 
+                if (isBud) scale *= 0.6;
+                
+                let zIndex = Math.floor(100 - bottom);
+                let brightness = 1 + (1 - depth) * 0.2; 
+
+                let randomImage = roseImages[Math.floor(Math.random() * roseImages.length)];
+                let hueRotate = Math.floor(Math.random() * 360); 
+                
+                fl.style.left = left + '%';
+                fl.style.bottom = bottom + '%';
+                fl.style.zIndex = zIndex; 
+                fl.style.setProperty('--target-scale', scale);
+                fl.style.transitionDelay = (Math.random() * 3) + 's'; 
+                
+                let startY = isBud ? 30 : 60;
+                
+                let stemHeight = 800 + Math.random() * 500; 
+                let bow = (Math.random() > 0.5 ? 1 : -1) * (15 + Math.random() * 35); 
+                
+                let originY = startY + stemHeight;
+                let swayDur = 3 + Math.random() * 2.5;
+                let swayDel = Math.random() * 2;
+                
+                let html = `<div style="position: relative; width: 100px; height: 100px; transform-origin: 50px ${originY}px; animation: sway ${swayDur}s ease-in-out infinite alternate ${swayDel}s;">`;
+                
+                if (isBud) {
+                    html += `
+                        <div class="bud" style="background: #ffaec7; filter: hue-rotate(${hueRotate}deg) brightness(${brightness});"></div>
+                        <div class="bud-sepals"></div>
+                    `;
+                } else {
+                    html += `<img src="${randomImage}" class="rose-img" style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)) hue-rotate(${hueRotate}deg) brightness(${brightness});">`;
+                }
+                
+                let pathD = `M 50 0 Q ${50 + bow} ${stemHeight/2} ${50 + bow/2} ${stemHeight}`;
+                
+                html += `<svg viewBox="0 0 100 ${stemHeight}" preserveAspectRatio="none" style="position: absolute; top: ${startY}px; left: 0; width: 100px; height: ${stemHeight}px; z-index: 1;">
+                            <path d="${pathD}" fill="none" stroke="#2e7d32" stroke-width="3" stroke-linecap="round" />
+                         </svg>`;
+                
+                if(!isBud) {
+                    let l1Y = 70 + Math.random() * 50; 
+                    let x1 = getStemX(l1Y, stemHeight, bow);
+                    let top1 = startY + l1Y;
+                    let rot1 = -15 - Math.random() * 25; 
+                    let size1 = 20 + Math.random() * 10;
+                    html += `<div class="leaf" style="width: ${size1}px; height: ${size1}px; top: ${top1 - size1}px; left: ${x1 - size1 + 1}px; border-radius: 0 50% 0 50%; transform-origin: bottom right; transform: rotate(${rot1}deg);"></div>`;
+                    
+                    let l2Y = 140 + Math.random() * 60; 
+                    let x2 = getStemX(l2Y, stemHeight, bow);
+                    let top2 = startY + l2Y;
+                    let rot2 = 15 + Math.random() * 25; 
+                    let size2 = 18 + Math.random() * 10;
+                    html += `<div class="leaf" style="width: ${size2}px; height: ${size2}px; top: ${top2 - size2 + 2}px; left: ${x2 - 1}px; border-radius: 50% 0 50% 0; transform-origin: bottom left; transform: rotate(${rot2}deg);"></div>`;
+                }
+                
+                html += `</div>`;
+                fl.innerHTML = html;
+                garden.appendChild(fl);
+            }
+        }
+
+        initGarden();
+
+        const body = document.body;
+        const cardOverlay = document.getElementById('cardOverlay');
+        let hasBloomed = false;
+
+        document.getElementById('flowerWrap').addEventListener('click', function() {
+            if(!body.classList.contains('blooming')) {
+                body.classList.add('blooming');
+                setTimeout(() => {
+                    cardOverlay.classList.add('active');
+                    hasBloomed = true;
+                }, 5000); 
+            }
+        });
+
+        document.getElementById('btnReadCard').addEventListener('click', () => { cardOverlay.classList.add('active'); });
+        document.getElementById('btnCloseCard').addEventListener('click', () => { cardOverlay.classList.remove('active'); });
+        document.getElementById('btnReset').addEventListener('click', () => {
+            body.classList.remove('blooming');
+            cardOverlay.classList.remove('active');
+            hasBloomed = false;
+            setTimeout(initGarden, 1500); 
+        });
+    </script>
+</body>
+</html>
